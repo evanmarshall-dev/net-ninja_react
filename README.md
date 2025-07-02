@@ -1,70 +1,55 @@
-# Getting Started with Create React App
+# Net Ninja React Course
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Module: Introduction
 
-## Available Scripts
+### What is React?
 
-In the project directory, you can run:
+A JS library used to create **single page apps** (SPAs). With SPAs a server only ever needs to send a _single_ HTML page to the browser and then React manages the whole website in the browser (i.e. website data, routing, user activity, etc.).
 
-### `npm start`
+With routing (page to page navigation) the new page is not sent from the server, but rather React changes the content in the browser. This all makes the website work quickly.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### React Fundamentals
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Using **state**
+- **React Router**
+- How and when to **fetch** data
+- **React Hooks** (i.e. `useState`, `useEffect`)
+- Create custom **hooks**
 
-### `npm test`
+## Module: Create React App
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Navigate to project directory and run `npx create-react-app my-app-name`.
 
-### `npm run build`
+### React App Structure
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+In the _public_ folder you will find an `index.html`. This is the one HTML file that is served to the browser and where all of the React code is injected into this file within the `div` with the `id` of `root`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The _working_ or _development_ code you create when building React app will go in the `src` folder. These will include the React **components**. The initial component created for us is the `App.js` file.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Within the src folder you will also see some **CSS** files, **test** files, `reportWebVitals.js`, and the `index.js` file. The `index.js` file kick starts the app. It is responsible for taking all of the React components and **mounting** them to the _DOM_. It does this by rendering the `App.js` component to the _DOM_ at the `div` `id` of `root` in the HTML file. This makes the `App.js` file the `root` component.
 
-### `npm run eject`
+```jsx
+// file: ./src/index.js
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+// You see below that root div of App.js is being rendered to the ReactDOM.
+// React.StrictMode provides console warnings.
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Module: Components and Templates
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+**Components** are self contained section of content (i.e. navbar, button, form, etc.).
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Each component contains all of its own **template** and **logic** for that piece of content. The component will contain all of its **template** (The HTML to make up said component) as well as all of its own JS **logic** (i.e. A function that runs when a logout button is clicked).
 
-## Learn More
+Starting out we only have the one component, `App.js` (root component). It is a function named `App` which returns **JSX**. The **JSX** is converted into HTML templates via React dependencies when we save the file then renders the HTML to the DOM.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+> [!NOTE]
+> At the bottom of React components you will export the component so that it can be used in other files (i.e. The `App` component is imported and used within the `index.js` file).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Module: Dynamic Values/Variables in Templates
