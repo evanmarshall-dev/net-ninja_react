@@ -1,13 +1,50 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+:root {
+  --bg-color: oklch(97.515% 0.01276 244.483);
+  --fg-color: oklch(32.109% 0.00004 271.152);
+  --accent-color: oklch(63.552% 0.22235 9.423);
+
+  --max-width-lg: min(1440px, calc(70% + 100px));
+  --max-width-sm: min(600px, calc(70% + 100px));
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* {
+  margin: 0;
+  box-sizing: border-box;
+  color: var(--fg-color, gray);
+  background-color: var(--bg-color, aliceblue);
+  font-family: "Roboto", sans-serif;
+}
+
+.navbar {
+  padding: 1.25rem;
+  display: flex;
+  max-width: var(--max-width-sm);
+  margin: 0 auto;
+  border-bottom: 1px solid oklch(96.115% 0.00011 271.152);
+
+  h1 {
+    color: var(--accent-color, #f1356d);
+  }
+
+  .links {
+    margin-left: auto;
+  }
+
+  a {
+    margin-left: 1rem;
+    text-decoration: none;
+    padding: 0.375rem;
+
+    &:hover {
+      color: var(--accent-color, #f1356d);
+    }
+  }
+}
+
+.content {
+  max-width: var(--max-width-sm);
+  margin: 2.5rem auto;
+  padding: 1.25rem;
 }
