@@ -48,3 +48,19 @@
   margin: 2.5rem auto;
   padding: 1.25rem;
 }
+
+.blog-preview {
+  padding: 0.75rem 1rem;
+  margin: 1.25rem 0;
+  border-bottom: 1px solid oklch(98.511% 0.00011 271.152);
+
+  &:hover {
+    box-shadow: 1px 3px 5px oklch(0% 0 0 / 0.1);
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    color: var(--accent-color, #f1356d);
+    margin-bottom: 0.5rem;
+  }
+}
