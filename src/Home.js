@@ -1,4 +1,5 @@
 import { useState } from "react";
+import BlogList from "./BlogList";
 
 const Home = () => {
   // Initial value of blogs state is an array of blogs. The blogs are objects.
@@ -36,12 +37,7 @@ const Home = () => {
 
   return (
     <div className="home">
-      {blogs.map((blog) => (
-        <div className="blog-preview" key={blog.id}>
-          <h2>{blog.title}</h2>
-          <p>Written by {blog.author}</p>
-        </div>
-      ))}
+      <BlogList blogs={blogs} title="All Blogs!" />
       {/* <h2>Homepage</h2> */}
       {/* Now name is a reactive value. */}
       {/* <p>

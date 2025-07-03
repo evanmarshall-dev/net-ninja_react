@@ -100,6 +100,8 @@ You can add a function (i.e. `handleClick()`) within the component and _bind_ it
 For example:
 
 ```jsx
+// file: ./src/Home.js
+
 const Home = () => {
   // Function called on click event.
   const handleClick = () => {
@@ -125,6 +127,8 @@ If we want to pass in an _argument_ to the function then we have to do it differ
 We have to _wrap_ the event handler inside an **anonymous function** in order to accomplish this. The **handler function** will take a parameter (i.e. `name`) and we call the handler function with the argument for name:
 
 ```jsx
+// file: ./src/Home.js
+
 // OTHER CODE...
 
 const handleClickAgain = (name) => {
@@ -154,6 +158,8 @@ For the second click event we do not have access to the **event object** right a
 For example:
 
 ```jsx
+// file: ./src/Home.js
+
 // OTHER CODE...
 
 const handleClickAgain = (name, event) => {
@@ -190,6 +196,8 @@ The `useState` hook can be used as many times as we want within a component to c
 For example:
 
 ```jsx
+// file: ./src/Home.js
+
 // OTHER CODE...
 
 const [name, setName] = useState("Mario");
@@ -236,3 +244,30 @@ A better strategy is to cycle through the blogs array using the **map** method.
 3. Assign the iteration to `blog` within the cb function as an argument representing the current item we are iterating over.
 4. For each iteration we want to output a `div` with a blog preview on the homepage which will display the title and author.
 5. Each root element in the template we return (blog-preview div) needs to have a `key` attribute (The `key` allows React to keep track of each item in the DOM as it outputs it or data is added/removed). Assigned to `blog.id` to be unique.
+
+## Module: Props
+
+Using the blog mapping output as an example, we might have the same section on several different pages and we do not want _repetitive_ code.
+
+We resolve this by making that chunk of template its own _reusable component_. With it set as it's own component we can simply import it into the components we want to use it in (i.e. `BlogList.js`).
+
+Sometimes we might want to use different data in the above component and we do this by passing in **props**. They allow us to pass data from a parent component into a child component (i.e. parent = `Home.js`, child = `BlogList.js`).
+
+1. Cut the `blogs.map` section from `Home.js` and add it to the new `BlogList` component.
+2. Import and add `<BlogList />` to the Home.js component.
+3. Pass in a **prop** to the `BlogList` component inside `Home.js` called `blogs`. This will allow us to use the blogs data from `Home.js` in the `BlogList` component.
+4. Pass in blogs state variable (blogs data) into the above **prop**.
+5. We now have access to an argument inside the `BlogList` component defined in `BlogList.js`. The argument is `props`. The property of `blogs` from `Home.js` will now will be available on the `props` object.
+6. Now having access to the **blogs prop** we can create a variable within `BlogList.js` to access the `blogs` (`const blogs = props.blogs;`).
+
+Looking at the props object in the console you will see it has the blogs property on it which is an array. Also you have the array of blogs (Get this due to the `console.log(props, blogs)`).
+
+> [!NOTE]
+> Any blogs that we send through to a component are attached to the `props` object that allows us to access them.
+
+You can pass in multiple props. For example back in Home.js we could pass in a title prop to the BlogList component (i.e. `<BlogList blogs={blogs} title="All Blogs" />`).
+
+Now we can access that `title` prop in the BlogList.js component. We then can add that above the blogs within an h2 (i.e. `<h2>{title}</h2>`).
+
+> [!TIP]
+> Where we call properties with the props object (`const blogs = props.blogs;`) we could instead **destructure**. This is done in the parenthesis instead of using `(props)` we would **destructure** from the props directly by telling it which properties you want `({blogs, title})`. We can now remove the constants for `blogs` and `title` and the component will still work.
