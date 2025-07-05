@@ -271,3 +271,131 @@ Now we can access that `title` prop in the BlogList.js component. We then can ad
 
 > [!TIP]
 > Where we call properties with the props object (`const blogs = props.blogs;`) we could instead **destructure**. This is done in the parenthesis instead of using `(props)` we would **destructure** from the props directly by telling it which properties you want `({blogs, title})`. We can now remove the constants for `blogs` and `title` and the component will still work.
+
+We can pass in different data to the `BlogList` component. Let's pass in `title="Mario's Blogs"` and set the blogs prop to filter for author of Mario.
+
+> [!NOTE]
+> The `filter` method takes a callback function that returns a boolean true or false. If true then a new array is created with the truthy item(s).
+
+## Module: Functions as Props
+
+If we wanted to be able to **delete** a blog we would add a button to the `BlogList.js` so that it shows up for each blog snippet.
+
+We would add `onClick` to button and remember to wrap in an _anonymous function_ so we can receive **arguments**. We need to pass in an ID to the function which is why we need it to be an **argument**. The ID will allow us to find the blog post and delete it.
+
+1. We create the `handleDelete` function and pass it in as a prop to the `BlogList` component (`<BlogList blogs={blogs} title="Mario's Blogs" handleDelete={handleDelete} />`).
+2. Then back in `BlogList.js` we accept the `handleDelete` function as a prop (Pass in function as a prop). We are invoking the function found in the parent home component.
+3. Inside `handleDelete` we use the `setBlogs` setter function to update the state to remove blog with corresponding ID.
+4. Within the `handleDelete` function we will create a constant called `newBlogs` and assign it a **filter** on the blogs array. The **filter** will return a new array with only _truthy_ values from the original array in it. Each iteration of the blogs array will take blog as an _argument_. _True_ is if the `id` does not match the `id` in `handleDelete` argument and _false_ if it does. The `id` of the blog we want to remove is coming from `blog.id` in `BlogList.js`.
+5. Then the new value of `blogs` will be `setBlogs(newBlogs)`, which will also re-render UI.
+
+> [!TIP]
+> We should not alter the BlogList's prop. Instead we make modifications where the **data** and **state** is held using `setBlogs` setter function.
+
+For example:
+
+```jsx
+// file: ./src/Home.js
+
+const Home = () => {
+  const [blogs, setBlogs] = useState([
+    { title: "My new website", body: "lorem ipsum...", author: "mario", id: 1 },
+    // OTHER CODE...
+  ]);
+
+  const handleDelete = (id) => {
+    // Set new filtered array to newBlogs.
+    // Assign iteration to blog and filter out blog.id if it is equal to current id to delete it. If not equal to current id we add it to the newBlogs array.
+    const newBlogs = blogs.filter((blog) => blog.id !== id);
+    // Use the setter function from useState and assign it to the newBlogs array to re-render UI.
+    setBlogs(newBlogs);
+  };
+
+  return (
+    <div className="home">
+      {/* This is where we add handleDelete as a prop for BlogList.js to use. */}
+      <BlogList blogs={blogs} title="All Blogs!" handleDelete={handleDelete} />
+    </div>
+  );
+};
+
+// REST OF CODE...
+
+// file: ./src/BlogList.js
+
+// We grab handleDelete function as a prop from Home.js.
+const BlogList = ({ blogs, title, handleDelete }) => {
+  return (
+    <div className="blog-list">
+      {/* OTHER CODE... */}
+      <button
+        {/* Wrap handleDelete() in anonymous function to only call handleDelete() function when clicked and not page load. */}
+        onClick={() => {
+          {/* Pass in blog.id as argument to handleDelete() function. We will be deleting based on the unique ID of the blog. */}
+          handleDelete(blog.id);
+        }}
+      >
+        Delete Blog
+      </button>
+    </div>
+  );
+};
+
+// REST OF CODE...
+```
+
+## Module: `useEffect` Hook
+
+This hook runs a function every render of the component. It renders on _load_ and when _state changes_ so `useEffect` runs code on every render mentioned above.
+
+1. Import the hook from React.
+2. Above return statement add `useEffect()`. It does not need to be assigned to a variable and does not return anything.
+3. Add anonymous function inside `useEffect()` as an **argument**. This is the function that runs on each render.
+
+> [!NOTE]
+> Usually inside the `useEffect` hook function we perform authentication or fetch data (side effects).
+
+We can also access state inside `useEffect` (i.e. blogs).
+
+> [!WARNING]
+> Be careful not to update state inside the `useEffect` hook because you could end up in a continuous loop. There are ways around this.
+
+### `useEffect` Dependencies
+
+Sometimes you do not want to run the `useEffect` hook every render so we would use a **dependency array**. This is passed into the hook as a _second_ argument. An _empty_ dependency array means that the function will only run _once_ on the first render.
+
+You can also add any state values that trigger a render to the dependency array.
+
+For the following example we will create a new state for `name`, add a button that will change the `name` on click by using `setName`, and add the `name` state variable as the dependency to `useEffect`.
+
+If we delete a blog or any other state change it will not work because it depends on `name`:
+
+```jsx
+// file: ./src/Home.js
+
+// OTHER CODE...
+
+const Home = () => {
+  // OTHER CODE...
+
+  const [name, setName] = useState("Mario");
+
+  // OTHER CODE...
+
+  useEffect(() => {
+    console.log("Use Effect Ran");
+    console.log(name);
+  }, [name]);
+
+  return (
+    <div className="home">
+      {/* OTHER CODE... */}
+      <button onClick={() => setName("Luigi")}>Change Name</button>
+      <p>{name}</p>
+      {/* OTHER CODE... */}
+    </div>
+  );
+};
+
+export default Home;
+```
