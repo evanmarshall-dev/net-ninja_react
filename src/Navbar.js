@@ -8,7 +8,7 @@ const Navbar = () => {
           href="/create"
           style={{
             color: "white",
-            backgroundColor: "#f1356d",
+            backgroundColor: "#635bff",
             borderRadius: "0.5rem",
           }}
         >
