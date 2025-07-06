@@ -399,3 +399,57 @@ const Home = () => {
 
 export default Home;
 ```
+
+## Module: JSON Server
+
+Allows us to utilize a fake **REST API**.
+
+When using JSON Server each top level property is considered a **resource** (i.e. `blogs`). **Endpoints** are created to interact with the **resource** so we can do things like delete items, edit items, add items, get items, etc.
+
+We use the JSON Server package to watch the file (`db.json`) and wrap it in some endpoints. We can either install the package locally or with npx to watch the `db.json` file.
+
+After running: `npx json-server --watch data/db.json --port 8000` to run JSON Server, watch db.json file, and run on port 8000 we will see an endpoint created at `http://localhost:8000/blogs`. If we are to perform a `GET` request now we would use the above endpoint. We will perform a `fetch` request within our component to get the data.
+
+> [!TIP]
+> You can demo the `GET` request by pasting the endpoint in the browser to view the `db.json` data.
+
+The endpoints we will be using are as follows:
+
+| Endpoint    | Method | Description         |
+| ----------- | ------ | ------------------- |
+| /blogs      | GET    | Fetch all blogs     |
+| /blogs/{id} | GET    | Fetch a single blog |
+| /blogs      | POST   | A a new blog        |
+| /blogs/{id} | DELETE | Delete a blog       |
+
+### Data Fetch
+
+Now that we will be fetching data from the `db.json` file we can clear out the manual data within the `blogs` `useState`, set it to `null` for the initial state, and we will be utilizing the `useEffect` hook to **fetch**.
+
+Once we successfully fetch the data we will update the state using the `setBlogs` setter function.
+
+1. Add `fetch()` to `useEffect()`.
+2. Add the endpoint inside a string within the fetch parenthesis.
+3. The fetch returns a `promise` so we can use a `.then()` which will run a function once the promise is resolved.
+4. We get a response (`res`) object (**not** the data) and to get the data we need to return `res.json()` into res anonymous function. The `res.json` passes the data into the res object for us. This also returns a `promise` because it is **asynchronous**.
+5. Add another `.then()` which runs a function once the `res.json` completes.
+6. Pass in the **parameter** of `data` into the second `.then()`. Logging the data to the console will show an array of two objects which are the blogs in `db.json`.
+7. Update the `blogs` state using `setBlogs` setter function. We pass in **data** into `setBlogs()` which is within the second `.then()` block. No _infinite loop_ because of the empty dependency array.
+8. Fix _error_ of mapping over blogs at value of `null` in `BlogList.js`. This happens because it takes a bit of time to fetch the data. We _wrap_ the `BlogList` component in a dynamic block and add `blogs &&` before `<BlogList />`. This creates a logical **AND** logic and since `blogs` is **falsy** then we do not output the `<BlogList />`. The right side of `&&` will only output when the left side is true (We will do this a lot with templating).
+
+## Module: Conditional Loading Message
+
+Create an additional piece of state inside `Home.js`.
+
+`const [isLoading, setIsLoading] = useState(true);`.
+
+Now to do another conditional template like we did with `{blogs && <BlogList />}`. This time it will be `{isLoading && <div>Loading...</div>}`.
+
+We only want it to show the loading message when the data is loading. When we receive the data we want to switch `isLoading` to false. This is done inside the `useEffect` hook after `setBlogs(data)`.
+
+`{isLoading && <div>Loading...</div>}`.
+
+> [!TIP]
+> You can emulate the loading message either by wrapping the `useEffect` fetch in a `setTimeout` or using the network throttling in Chrome Dev Tools.
+
+## Module: Fetch Errors
