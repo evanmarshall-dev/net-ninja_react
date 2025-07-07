@@ -453,3 +453,33 @@ We only want it to show the loading message when the data is loading. When we re
 > You can emulate the loading message either by wrapping the `useEffect` fetch in a `setTimeout` or using the network throttling in Chrome Dev Tools.
 
 ## Module: Fetch Errors
+
+Common errors with fetch are **connection** errors or errors fetching **data** from server.
+
+1. Add a `catch()` block to the `useEffect` hook after the last `.then()`. The `catch()` block catches any **network** error (Cannot connect to server) and fires a function.
+2. If request is denied or endpoint does not exist then we would check the `ok` property of the `res` object in an if statement in the first `.then()`. If it is **not** `ok` then we `throw` and `Error` with a message for the error.
+3. Store the **error** in some kind of state by setting `error` and `setError` for `useState`. Initial value for state is `null`.
+4. Add `setError(err.message)` to the catch block instead of console.
+5. We can now do _conditional rendering_ in the template to output the error message. Now only if we have a value for state variable `error` will we output it.
+6. Also add `isLoading(false)` in the catch block since it is not actually loading when there is an error.
+7. If we end up successfully fetching data in the future we want to _remove_ the error message so we will add `setError(null)` to the second `.then()` block.
+
+When we `throw` an error then it is caught by the `catch()` block and the `.message` is logged to the console.
+
+## Module: Create a Custom Hook
+
+With the `useEffect` hook in `Home.js` we are updating _state_ for blogs, _loading_ message, and _error_. You can prevent having to write all of this code over again by creating a **custom hook**. This is done by externalizing the login into its own JS file to be imported into other components if needed.
+
+1. Create a new file in the `src` dir called `useFetch.js`.
+2. Create a function to put all of the `useEffect` and `useState` code in from `Home.js`. This is the **hook**. Custom hooks need to start with the word **use**. In this case, `useFetch`.
+3. Copy `useEffect` code and `useState` code from `Home.js` and paste inside `useFetch`. Make sure to _import_ `useEffect` and `useState` from React as well as _export_ default `useFetch`.
+4. Change `[blogs, setBlogs]` to `[data, setData]` in `useFetch.js` because in another component it might not be blogs as the data we are fetching. Don't forget to change it inside the `useEffect` hook as well.
+5. _Return_ some values as the bottom of the `useEffect` hook. We will return an _object_ (i.e. It can be an array or boolean). Inside the object we will add three props (_data_, _isLoading_, and _error_). We do this because we want to grab those _three_ properties from the hook.
+6. Next, we will pass the **endpoint** into the `useFetch` function as an _argument_ (`url`) versus hardcoding it as part of the _fetch block_. This is because it might not always be the same endpoint in another component we are using the `useFetch` in. Make sure to add url to the fetch parenthesis as well.
+7. Pass in the url as the **dependency array** for `useEffect` (`useEffect(() => {...}), [url]`) so that whenever the URL changes it will re-run the function to get the data for the new endpoint.
+8. Import the `useFetch` function inside the `Home.js` component. We do this by **destructuring** the three props from the `useFetch` function (_data_, _isLoading_, and _error_). If we used an **array** for the returned props in `useFetch.js` then the order would be required when importing into `Home.js` (Therefore an object is more ideal). `const {data, isLoading, error} = useFetch("http://localhost:8000/blogs");`.
+
+> [!TIP]
+> Now that the prop for blogs has been changed to data you can either change the blogs value in the conditional statement in `Home.js` to `{blogs && <BlogList blogs={data} />}` or change the value of data to blogs in the destructuring of the `useFetch` using a colon `const {data: blogs} = useFetch("http://localhost:8000/blogs");`.
+
+## Module: The React Router

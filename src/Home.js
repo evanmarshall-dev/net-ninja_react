@@ -1,7 +1,12 @@
-import { useState, useEffect } from "react";
 import BlogList from "./BlogList";
+import useFetch from "./useFetch";
 
 const Home = () => {
+  const {
+    data: blogs,
+    isLoading,
+    error,
+  } = useFetch("http://localhost:8000/blogs");
   // Initial value of blogs state is an array of blogs. The blogs are objects.
   // const [blogs, setBlogs] = useState([
   //   { title: "My new website", body: "lorem ipsum...", author: "mario", id: 1 },
@@ -13,8 +18,9 @@ const Home = () => {
   //     id: 3,
   //   },
   // ]);
-  const [blogs, setBlogs] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // ? const [blogs, setBlogs] = useState(null);
+  // ? const [isLoading, setIsLoading] = useState(true);
+  // ? const [error, setError] = useState(null);
 
   // ? const [name, setName] = useState("Mario");
   // ? let name = "Mario";
@@ -47,19 +53,30 @@ const Home = () => {
   // ? setBlogs(newBlogs);
   // ? };
 
-  useEffect(() => {
-    fetch("http://localhost:8000/blogs")
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        // ? console.log(data);
-        setBlogs(data);
-        setIsLoading(false);
-      });
-    // ? console.log("Use Effect Ran");
-    // ? console.log(blogs);
-  }, []);
+  // ? useEffect(() => {
+  //   ? fetch("http://localhost:8000/blogs")
+  //     // ? fetch("http://localhost:8000/blogss") // Test error.
+  //     ? .then((res) => {
+  //       // ? console.log(res);
+  //       ? if (!res.ok) {
+  //         ? throw Error("Could not fetch the data for that resource! ⛔️🤬");
+  //       ? }
+  //       ? return res.json();
+  //     ? })
+  //     ? .then((data) => {
+  //       // ? console.log(data);
+  //       ? setBlogs(data);
+  //       ? setIsLoading(false);
+  //       ? setError(null);
+  //     ? })
+  //     ? .catch((err) => {
+  //       // ? console.log(err.message);
+  //       ? setIsLoading(false);
+  //       ? setError(err.message);
+  //     ? });
+  //   // ? console.log("Use Effect Ran");
+  //   // ? console.log(blogs);
+  // ? }, []);
   // ? useEffect(() => {
   //   ? console.log("Use Effect Ran");
   //   ? console.log(name);
@@ -67,6 +84,7 @@ const Home = () => {
 
   return (
     <div className="home">
+      {error && <div>{error}</div>}
       {isLoading && <div>Loading...</div>}
       {blogs && (
         <BlogList
