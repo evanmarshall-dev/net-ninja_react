@@ -511,3 +511,43 @@ With the `useEffect` hook in `Home.js` we are updating _state_ for blogs, _loadi
 
 > [!NOTE]
 > When user visits `/` we want to render the `Home` component. Also, the `Navbar` component is always going to show because it is **outside** the `Switch` statement. It will show on every route.
+
+## Module: `useEffect` Cleanup
+
+If there were two routes and one was fetching data while we switch to a new one we would get an error in the console: '_Warning: Can't perform a React state update on an unmounted component_'. This is because the data fetching did not complete and now the component that was performing the fetch is no longer displayed in the browser (The unmounted component is the one trying to fetch the data).
+
+We want to stop the fetch once we navigate to a new route/component. This is done with both the **cleanup** function in `useEffect` hook and the **abort controller**.
+
+1. Go to the `useFetch.js` and add a `return` function at the bottom of the `useEffect` hook.
+2. At the top of the `useEffect` hook we will add the abort controller. `const abortCont = new AbortController();`. We will associate the abort controller with a fetch request so that we can use it to stop the fetch.
+3. Add a second argument to fetch as signal and set signal to the abort controller. `fetch(url, { signal: abortCont.signal })`.
+4. Now we remove the console log from the cleanup function and add the `constant.abort()` method.
+
+When we abort a fetch it still throws an error which is caught in the catch block and we update the state. We are not updating the data anymore because the fetch has been stopped, but we are still updating the state. This means we are still trying to update the home component with that state.
+
+1. Update the catch block to recognize the abort and not update the state. `if (err.name === "AbortError") {console.log("Fetch Aborted");}`.
+2. Add the `setIsLoading` and `setError` to an else statement in the same if statement.
+
+## Module: Route Parameters
+
+Sometimes we use _dynamic_ values as part of a route. The dynamic part of a route is the **route parameter** (Like a variable inside a route).
+
+We can _access_ route parameters inside our React app and components.
+
+1. Create a `BlogDetails.js` inside the `src` dir.
+2. Add a new `Route` on `App.js` and the syntax for a route param is **:param-name** (i.e. `<Route path="/blogs/:id" element={<BlogDetails />} />`). Make sure you add the `BlogDetails` component to the `Route`.
+
+Now if you navigate to `/blogs/anything-here(id)` you will see the blog details component no matter what you put in after `/blogs/`.
+
+We want to be able to fetch the `id` inside the blog details component. We will use a hook (`useParams`) from react router to do this.
+
+1. Import `useParams` from `react-router-dom` inside the blog details component.
+2. Add a new constant to the top of the component and set it equal to `useParams()`.
+3. **Destructure** whatever params you want (We names our param `id` in the `Route` in the `App.js` file).
+4. Now you can add the dynamic `id` to the template by adding `id` inside curly braces.
+
+Now that we have access to the param `id` we can fetch data from that blog using said `id`.
+
+1. Now we will add links to the blog details component from the blogs listed on the Homepage.
+2. We have access to each blog inside the `map` function in the `BlogList.js`. Also, each blog in `/data/db.json` has a corresponding `id` property. So we can wrap the `h2` and `p` elements in `BlogList.js` inside a **link** using the `id` prop.
+3. To the `Link` to value we will set it equal to curly braces and template literals because some of the value will be dynamic. Set it equal to `/blogs/` and variable containing blog from `map` and `.id` for each blog's `id` prop. ` <Link to={``/blogs/${blog.id``}></Link> `.
