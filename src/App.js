@@ -1,5 +1,7 @@
+import Create from "./Create";
 import Home from "./Home";
 import Navbar from "./Navbar";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
   // ? const title = "Welcome to my App";
@@ -8,26 +10,35 @@ function App() {
   // ? const link = "https://www.google.com";
 
   return (
-    <div className="App">
-      <Navbar />
-      <div className="content">
-        <Home />
-        {/* <h1>App Component</h1> */}
-        {/* <h1>{title}</h1> */}
-        {/* <p>Liked {likes} times!</p> */}
+    <Router>
+      <div className="App">
+        <Navbar />
+        <div className="content">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/create" element={<Create />} />
+            {/* <Route path="/create">
+              <Create />
+            </Route> */}
+          </Routes>
+          {/* <Home /> */}
+          {/* <h1>App Component</h1> */}
+          {/* <h1>{title}</h1> */}
+          {/* <p>Liked {likes} times!</p> */}
 
-        {/* <p>{person}</p> */}
+          {/* <p>{person}</p> */}
 
-        {/* <p>{10}</p> */}
-        {/* <p>{"This is a string directly in JSX!"}</p> */}
-        {/* <p>{[1, 2, 3, 4, 5, 6, 7].join(", ")}</p> */}
-        {/* <p>{Math.floor(Math.random() * 10)}</p> */}
+          {/* <p>{10}</p> */}
+          {/* <p>{"This is a string directly in JSX!"}</p> */}
+          {/* <p>{[1, 2, 3, 4, 5, 6, 7].join(", ")}</p> */}
+          {/* <p>{Math.floor(Math.random() * 10)}</p> */}
 
-        {/* <a href={link} target="_blank" rel="noopener noreferrer">
+          {/* <a href={link} target="_blank" rel="noopener noreferrer">
           Google Search
         </a> */}
+        </div>
       </div>
-    </div>
+    </Router>
   );
 }
 

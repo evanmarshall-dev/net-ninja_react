@@ -483,3 +483,31 @@ With the `useEffect` hook in `Home.js` we are updating _state_ for blogs, _loadi
 > Now that the prop for blogs has been changed to data you can either change the blogs value in the conditional statement in `Home.js` to `{blogs && <BlogList blogs={data} />}` or change the value of data to blogs in the destructuring of the `useFetch` using a colon `const {data: blogs} = useFetch("http://localhost:8000/blogs");`.
 
 ## Module: The React Router
+
+### Regular Multi-page Website
+
+- A regular multi page website sends a request to the server when you type in its URL.
+- Server sends back an HTML page which we view.
+- When a user clicks a link to another page on the site it sends a new request to the server.
+- Server responds again by sending back the HTML page.
+- Repeat each time a page is clicked on. **Constant** requests for pages from the server.
+
+### React Multi-page Website
+
+- React delegates all page changes and routing to the browser only.
+- Starts the same way with initial request to the server.
+- Server responds and renders HTML page to browser, _BUT_ it also sends back the compiled/bundled React JS files which control the application.
+- Now React takes full control of the app. Initially the page is empty and then React **injects** content dynamically using the created components.
+- If a user then clicks on a page in the navigation **React Router** intercepts this, prevents new server request, and then looks at the request and inject the required content/component(s) on screen.
+
+### Create Routes in React
+
+1. Install React Router `pnpm install react-router-dom`.
+2. Import `BrowserRouter as Router`, `Route`, and `Switch` components from **React Router** in the `App.js` file.
+3. Surround entire app with the Router component. This gives the entire app access to the router as well as all child components.
+4. We want the page content to go inside `<div className="content">...</div>` when we go to different pages. So we will replace the `Home` component in `App.js` with the `Switch` component. The switch component makes it so that only **one** route shows at a time.
+5. We place each route inside the switch statement. Currently only have one route (Homepage). We add the `Route` component and the `path` attribute to this component (i.e. For the homepage the path would be `/`).
+6. Nest the component inside the route that we want to be injected when a user visits the route (i.e. `Home` component).
+
+> [!NOTE]
+> When user visits `/` we want to render the `Home` component. Also, the `Navbar` component is always going to show because it is **outside** the `Switch` statement. It will show on every route.
