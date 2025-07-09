@@ -551,3 +551,18 @@ Now that we have access to the param `id` we can fetch data from that blog using
 1. Now we will add links to the blog details component from the blogs listed on the Homepage.
 2. We have access to each blog inside the `map` function in the `BlogList.js`. Also, each blog in `/data/db.json` has a corresponding `id` property. So we can wrap the `h2` and `p` elements in `BlogList.js` inside a **link** using the `id` prop.
 3. To the `Link` to value we will set it equal to curly braces and template literals because some of the value will be dynamic. Set it equal to `/blogs/` and variable containing blog from `map` and `.id` for each blog's `id` prop. ` <Link to={``/blogs/${blog.id``}></Link> `.
+
+## Module: Reuse Custom Hook
+
+We will reuse the custom hook `useFetch` in the `BlogDetails` component to **fetch** data based on the id of the blog.
+
+Take note that the `useFetch` component returns _data_, _isLoading_, and _error_.
+
+We will use the hook (`useFetch`) in the blog details component and pass in the URL of the endpoint we want to fetch data from.
+
+1. Import `useFetch` into `BlogDetails.js`.
+2. Add constant, destructure the three returned data from `useFetch` (_data_, _isLoading_, etc.), and set it equal to `useFetch('https://localhost:8000/blogs/' + id);`.
+3. Add a **loading** `div` to the template using a conditional and `isLoading`.
+4. Do the same as above for an **error** `div`.
+5. We want to have some template for the blog itself once we have blog details or a value for the blog (This starts as `null` in `useFetch`).
+6. Build up the blog template using a conditional like loading and error and add elements inside parenthesis (i.e. article, with blog title, author and body).

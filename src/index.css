@@ -68,3 +68,24 @@
     text-decoration: none;
   }
 }
+
+.blog-details {
+  h2 {
+    font-size: 1.25rem;
+    color: var(--accent-color, #635bff);
+    margin-bottom: 0.75rem;
+  }
+
+  div {
+    margin: 1.25rem 0;
+  }
+
+  /* button {
+    background-color: var(--accent-color, #635bff);
+    color: oklch(100% 0.00011 271.152);
+    border: 0;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  } */
+}
