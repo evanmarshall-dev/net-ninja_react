@@ -600,3 +600,99 @@ When a button is pressed inside of a form it fires a **submit event** on the for
 
 1. Inside the handleSubmit function after prevent default, we add constant for blog and set it equal to an object.
 2. Inside the object for blog we add `title`, `blog`, and `author`.
+
+## Module: `POST` Request
+
+Now that we can grab the blog data on form submit we need to perform a `POST` request to JSON Server to add the data to `/data/db.json`.
+
+You could modify the `useFetch` hook to handle the `POST` request, but we will instead add it directly to `handleSubmit` function in the `Create.js` since we are only going to make the request in one place in our app.
+
+1. In `Create.js` `handleSubmit` function we will add the `fetch` block with the endpoint for all blogs.
+2. There is a _second argument_ we add to the `fetch` block where we tag on the data as well as define the request type (`POST`).
+3. Within the second argument we add method of `POST`, `headers` (For content type of JSON which will be sent with this request), and `body` which is the data we will be sending.
+4. In the `body` we need to convert the data from an object to a JSON string using the `stringify` method. We pass in the data we want to convert which is `blog`.
+5. The fetch is **asynchronous** so we can add a `.then()` block to fire a function when this is complete.
+6. Add in a _loading_ state with an initial state of `false`. It will be changed to true when we submit the form which is within the `handleSubmit` function: `setIsLoading(true);`.
+7. Then we want it to go back to false after submit so within the `.then()` block.
+8. We want to have one button in the template for when `isLoading` is `false` (i.e. Add Blog button) and one for when `isLoading` is `true` (i.e. Loading... button which is disabled). This is done by adding curly braces around the button and when **not** `isLoading` you render the Add Blog button and when it **is** `isLoading` you render an Adding Blog button: `{!isLoading && <button>Add Blog</button>}{isLoading && <button disabled>Adding Blog...</button>}`.
+
+For example:
+
+```jsx
+// file: ./src/Create.js
+
+// OTHER CODE...
+
+const [title, setTitle] = useState("");
+const handleSubmit = (event) => {
+  event.preventDefault();
+  const blog = { title, body, author };
+  // ? console.log(blog);
+
+  setIsLoading(true);
+
+  fetch("http://localhost:8000/blogs", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(blog),
+  }).then(() => {
+    console.log("New Blog Added");
+    setIsLoading(false);
+  });
+};
+
+// OTHER CODE...
+```
+
+## Module: Programmatic Redirects
+
+Once we complete the new blog submission we want to redirect the user back to the homepage. We can accomplish this by using another **React Router hook** called `useNavigate`.
+
+The `useNavigate` hook allows us to go navigate the app **imperatively**. It does this in a fast way.
+
+1. Inside the `Create.js` we want to import `useNavigate` from React Router DOM.
+2. Invoke the `useNavigate` hook: `const navigate = useNavigate();`.
+3. We now have an object represented by `navigate` constant which we can pass in a route to redirect to.
+4. Add the navigate method and homepage route to the `.then()` block.
+
+## Module: Deleting Blogs
+
+1. Add a **delete** button at the bottom of the `BlogDetails` component template and attach a **click** event to it.
+2. Assign a handle **delete** function to the `onClick` event of the button.
+3. Inside the `handleDelete` function we will make a **fetch** request and pass in the `blogs` endpoint as well as the `id` of the blog we want to delete (We have access to `blog.id` so that is what we will put at the end of the endpoint).
+4. We now need the second argument inside fetch which is the object specifying request type (`DELETE`).
+5. Since fetch is `async` we can tack on a `.then()` block which will fire a function when request is completed.
+6. After blog is deleted we want to redirect user to the homepage so we will use the `useNavigate` hook and pass in the route for the homepage. This is all done within the `.then()` block function.
+
+For example:
+
+```jsx
+// file: ./src/BlogDetails.js
+
+// OTHER CODE...
+
+const handleDelete = () => {
+  fetch(`http://localhost:8000/blogs/${blog.id}`, {
+    method: "DELETE",
+  }).then(() => {
+    navigate("/");
+  });
+};
+
+// OTHER CODE...
+
+<article>
+  <h2>{blog.title}</h2>
+  <p>Written by {blog.author}</p>
+  <div>{blog.body}</div>
+  <button onClick={handleDelete}>Delete</button>
+</article>;
+```
+
+## Module: 404 Pages
+
+When a user tries to navigate to a page/route that does not exist we will display this 404 page.
+
+1. Create a new component called `Notfound.js`.
+2. Add a stateless function to the above component with some content as well as a `Link` property from **React Router** to take user back to homepage.
+3. We need to add a catch-all route for the `NotFound` component to `App.js`. This is done by adding a new route, with `NotFound` component and setting the element/path to an **asterisks**: `<Route path="*" element={<NotFound />} />`. The asterisks means to _catch all_ other routes.

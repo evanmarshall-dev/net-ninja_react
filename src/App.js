@@ -3,6 +3,7 @@ import Create from "./Create";
 import Home from "./Home";
 import Navbar from "./Navbar";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import NotFound from "./NotFound";
 
 function App() {
   // ? const title = "Welcome to my App";
@@ -19,6 +20,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/create" element={<Create />} />
             <Route path="/blogs/:id" element={<BlogDetails />} />
+            <Route path="*" element={<NotFound />} />
             {/* <Route path="/create">
               <Create />
             </Route> */}

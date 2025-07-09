@@ -1,14 +1,32 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Create = () => {
+  // STATE Variables
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [author, setAuthor] = useState("mario");
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Constant Variables
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const blog = { title, body, author };
-    console.log(blog);
+    // ? console.log(blog);
+
+    setIsLoading(true);
+
+    fetch("http://localhost:8000/blogs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(blog),
+    }).then(() => {
+      console.log("New Blog Added");
+      setIsLoading(false);
+      navigate("/");
+    });
   };
 
   return (
@@ -36,7 +54,8 @@ const Create = () => {
           <option value="mario">Mario</option>
           <option value="yoshi">Yoshi</option>
         </select>
-        <button>Add Blog</button>
+        {!isLoading && <button>Add Blog</button>}
+        {isLoading && <button disabled>Adding Blog...</button>}
         <p>{title}</p>
         <p>{body}</p>
         <p>{author}</p>
