@@ -89,3 +89,40 @@
     cursor: pointer;
   } */
 }
+
+.create {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+
+  label {
+    text-align: left;
+    display: block;
+  }
+
+  h2 {
+    font-size: 20px;
+    color: var(--accent-color, #635bff);
+    margin-bottom: 30px;
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 6px 10px;
+    margin: 10px 0;
+    border: 1px solid oklch(89.755% 0.0001 271.152);
+    box-sizing: border-box;
+    display: block;
+  }
+
+  button {
+    background: var(--accent-color, #635bff);
+    color: oklch(100% 0.00011 271.152);
+    border: 0;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+}

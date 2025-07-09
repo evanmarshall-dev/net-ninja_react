@@ -566,3 +566,37 @@ We will use the hook (`useFetch`) in the blog details component and pass in the 
 4. Do the same as above for an **error** `div`.
 5. We want to have some template for the blog itself once we have blog details or a value for the blog (This starts as `null` in `useFetch`).
 6. Build up the blog template using a conditional like loading and error and add elements inside parenthesis (i.e. article, with blog title, author and body).
+
+## Module: Controlled Inputs (Forms)
+
+We will use forms to add to the blog data. This will require **controlled inputs** and different form fields. **Controlled inputs** are a way to setup form inputs in React so that we can track their _value_ and store the _value_ in some kind of state (State will be stored in `Create.js`). We can also make it so that if state _changes_ we can update the _value_ we see in the input field. Input field and state are kept in _sync_ with each other.
+
+1. At the top of `Create.js` we will add state for the title with the initial value as an empty string: `const [title, setTitle] = useState("");`.
+2. Associate the title state value with the value of the title input. Dynamically add title as a value for the text input for title: `<input type="text" required value={title} />`. Whatever is in the `useState` for title will show as the text input value, but it will not let us change the value.
+3. We need to make it so that when we change the value for title it triggers the `setTitle` setter function and this re-renders so the value updates.
+4. We add the `onChange` event to the input for title and set it to an anonymous function that invokes `setTitle`. This changes the title when we change the input value: `<input type="text" required value={title} onChange={() => setTitle()} />`.
+5. Since we get access to the **event object** inside the anonymous function above we can update the useState value whenever we type in the title input field. Using `e.target.value` (Target is the title input and value is whatever we type into the target): `<input type="text" required value={title} onChange={(event) => setTitle(event.target.value)} />`.
+6. We want to see the above changes so we will add a paragraph element at the bottom of the form and output the `title` value dynamically.
+7. Repeat all steps for the body while changing from title to body accordingly.
+8. For the select element for author it is very similar for setting state except the initial state is equal to one of the author values.
+9. For `value` and `onChange` for the author select element we do the same thing making sure we update from title to author.
+10. Dynamically output author value at the bottom of the form as well.
+
+## Module: Submit Events
+
+When a button is pressed inside of a form it fires a **submit event** on the form itself. We can listen to that submit event and react to it.
+
+> [!NOTE]
+> You can also attach click event to the button itself, but it is preferable to react to the submit event.
+
+1. Add the `onSubmit` event to the form element.
+2. Create a `handleSubmit` function at the top of the component and assign the `onSubmit` event to it.
+3. In the `handleSubmit` function we pass in the **event object** and reference the function within the form `onSubmit` attribute.
+4. Inside the `handleSubmit` code block we first prevent default action of the form submission (i.e. A page refresh): `event.preventDefault()`.
+5. Next, we create a blog object. This is what generally is saved inside the `/data/db.json`.
+
+> [!NOTE]
+> When using JSON Server we do not need to provide an `id` prop to the blog object because when we make a **post** request JSON Server will create a unique `id` for us.
+
+1. Inside the handleSubmit function after prevent default, we add constant for blog and set it equal to an object.
+2. Inside the object for blog we add `title`, `blog`, and `author`.
